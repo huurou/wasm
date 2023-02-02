@@ -7,20 +7,26 @@
 </head>
 
 <body>
-    <input type="button" id="countup" value="CountUp?" />
-
     <script>
-        fetch('sample.wasm')
+        fetch('loop.wasm')
             .then(response => response.arrayBuffer())
             .then(buffer => WebAssembly.compile(buffer))
             .then(module => {
                 const instance = new WebAssembly.Instance(module);
-                console.log(instance);
-                document.getElementById('countup').addEventListener('click', () => {
-                    this.value = instance.exports.count();
-                    console.log(this.value)
-                }, false);
+                console.time('timer1');
+                instance.exports.loop();
+                console.timeEnd('timer1');
             });
+        console.time('timer2');
+        loop();
+        console.timeEnd('timer2');
+
+        function loop() {
+            'use asm';
+            for (var i = 0; i < 100000000; i++) {
+                const x = 100 * 100;
+            }
+        }
     </script>
 </body>
 
